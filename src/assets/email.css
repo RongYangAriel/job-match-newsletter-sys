@@ -1,0 +1,33 @@
+.email-container {
+    border: 1px black;
+    overflow: hidden;
+    padding:20px;
+    width:50%;
+    height: 50%;
+    text-align: left;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    background-color: rgba(221, 221, 221, 0.5); /* complimenting your modal colors */
+    z-index: 100;
+}
+.email-container.show {
+    display: block;
+}
+.email-container.hidden {
+    display: none;
+}
+.email-container .email .body{
+    margin:5%;
+    width: 90%;
+    height: 20vh;
+    text-align: left;
+}
+.email-container .close{
+    cursor: pointer;
+    float: right;
+}
+
+.email-container .save-btn {
+    float: left;
+}
