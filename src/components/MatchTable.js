@@ -37,15 +37,16 @@ const MatchTable = (props) => {
 
         // Key:talent Index; value: {jobIndex: score}
         let matchResult = {};
-        
+        let sortedResult = [];
         //
-        let talentTable = props.talent.rows.slice(0);
-        let jobTable = props.jd.rows.slice(0);
+        let talentTable = props.talent.rows.slice(1);
+        let jobTable = props.jd.rows.slice(1);
 
 
         for (let talentIndex = 0; talentIndex < talentTable.length; talentIndex ++) {
-            
+
             matchResult[talentIndex] = {};
+            sortedResult[talentIndex] = {};
 
             for (let jobIndex = 0; jobIndex < jobTable.length; jobIndex ++ ) {
                 let jobTalentScore = 0;
@@ -53,20 +54,28 @@ const MatchTable = (props) => {
                 for (let standard of standards) {
                     // console.log(standard);
 
-                    if (talentTable[talentIndex][talentMap[standard]] == jobTable[jobIndex][jdMap[standard]]){
+                    if (talentTable[talentIndex][talentMap[standard]] === jobTable[jobIndex][jdMap[standard]]){
                         jobTalentScore ++;
                     }
                 }
-
+                console.log(`index: ${talentIndex}, talent: ${talentTable[talentIndex]}`);
                 matchResult[talentIndex][`${jobIndex}`] = jobTalentScore;
             }
+            
+            sortedResult[talentIndex] = Object.entries( matchResult[talentIndex]).sort((a,b) => a[1] - b[1]);
+
+            console.log('matched scroe', matchResult[talentIndex]);
+            console.log('ranked index', sortedResult[talentIndex]);
         }
-        return matchResult
+
+
+
+        return  matchResult, sortedResult
     };
 
 
 
-    console.log(matchingAlgo({talentMap , jdMap}));
+    matchingAlgo({talentMap , jdMap});
 
     return (
         <OutTable data={props.jd.rows} columns={props.jd.cols}/>
