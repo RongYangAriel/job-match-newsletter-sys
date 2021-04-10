@@ -64,9 +64,11 @@ class ExcelImporter extends Component  {
                     }
                 }, () => {
                     console.log(this.state);
+                    alert("Talent Data is Uploaded");
                 });
             }
-        })
+        });
+        
     }
 
     jdHandler = (event) => {
@@ -83,9 +85,10 @@ class ExcelImporter extends Component  {
                     }
                 }, () => {
                     console.log(this.state);
+                    alert("Job Description is Uploaded");
                 });
             }
-        })
+        });
     }
 
     matchData = () => {
@@ -104,6 +107,7 @@ class ExcelImporter extends Component  {
 
     render () 
         {
+            
         return (
         <div className='container'>
             <div className="links">
@@ -114,7 +118,7 @@ class ExcelImporter extends Component  {
                 </Button>
 
                 <Button variant="contained" color="primary" component="label">
-                    JD Imports
+                    JD Import
                     <input type='file' accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange = {this.jdHandler} hidden></input>
                 </Button>
                 {/* {this.state.talent.dataLoaded ? 
