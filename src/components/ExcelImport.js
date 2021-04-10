@@ -3,6 +3,7 @@ import React, { useState, Component} from "react";
 import {OutTable, ExcelRenderer} from 'react-excel-renderer';
 import {Button, Input} from '@material-ui/core';
 import Email from './Email';
+import MatchTable from './MatchTable';
 import '../assets/email.css';
 
 class ExcelImporter extends Component  {
@@ -22,16 +23,17 @@ class ExcelImporter extends Component  {
         },
         matchedJobs: {
             cols: {
-                talentName: "",
-                email:"",
-                location: "",
-                seniority: "",
-                techstack: "",
-                IOM: "",
-                jobLinks: [],
+                talentName: "Talent Name",
+                email:" Email",
+                location: " Location",
+                seniority: "Seniority",
+                techstack: "Tech Stack",
+                IOM: "IOM",
+                jobLinks: "Job Links",
                 linkedIn: ""
             },
-            rows: null
+            rows: null,
+            dataLoaded: false
         },
         emailTemplate: {
             subject: null,
@@ -39,7 +41,8 @@ class ExcelImporter extends Component  {
             matchedPosition: null,
             close: "Thanks, Kirby"
         },
-        emailPoped: false
+        emailPoped: false,
+        dataLoaded: false,
 
     };
 
@@ -85,8 +88,10 @@ class ExcelImporter extends Component  {
         })
     }
 
-    loadData = () => {
-
+    matchData = () => {
+        if(this.state.talent.dataLoaded && this.state.jd.dataLoaded) {
+            this.setState({dataLoaded: true});
+        }
     }
 
     emailPop = (event) => {
@@ -122,7 +127,7 @@ class ExcelImporter extends Component  {
             
             
             <div className='links'>
-                <Button variant="contained" color="default" component="label" onClick={this.loadData}>
+                <Button variant="contained" color="default" component="label" onClick={this.matchData}>
                     Load Data
                 </Button>
             </div>
@@ -136,7 +141,14 @@ class ExcelImporter extends Component  {
                 <Email toggle={this.emailPop} /> 
             </div>)
             }
-
+            {
+                this.state.dataLoaded ? (
+                <div className="data-talbe">
+                    <MatchTable talent={this.state.talent} jd={this.state.jd} />
+                </div>
+                ) : null
+            }
+           
         </div>
           
 

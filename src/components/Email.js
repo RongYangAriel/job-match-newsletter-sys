@@ -21,6 +21,7 @@ class Email extends Component {
     handleClick = () => {
         this.props.toggle();
     }
+    
     handleChange = (event) => {
         this.setState( {
             email: {
@@ -57,7 +58,6 @@ class Email extends Component {
                     SAVE
                     <input  type="submit" value="Save"  hidden onClick={this.handleSubmit}/>
                 </Button>
-
             </form>
             
           </div>
