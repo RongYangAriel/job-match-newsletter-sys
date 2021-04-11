@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
 import {OutTable, ExcelRenderer} from 'react-excel-renderer';
 
+
+//constand can be changed based on excel col name
 const standards = ['Location', 'TechStack', 'Seniority', 'IOM'];
+
+const URL = "JobURL";
+
 
 const MatchTable = (props) => {
 
-    const [matchData, setMatchData] = useState({});
+    const result = {
+            cols: [...props.talent.cols, {name: 'joblinks', key:'joblinks'}, {name: 'Preview(Popup)', key:'popup'}],
+            rows: [...props.talent.rows]
+        };
+    
+    const [isbuilt,setIsBuilt] = useState(false);
+
+   
+
 
     // Find the standarad col index in both excel
     const buildStandardTable = () => {
@@ -30,11 +43,9 @@ const MatchTable = (props) => {
         return {talentMap, jdMap}
     }
 
-    const {talentMap , jdMap} = buildStandardTable();
 
+    // Take two cretia position map as input
     const matchingAlgo = ({talentMap, jdMap}) => {
-
-
         // Key:talent Index; value: {jobIndex: score}
         let matchResult = {};
         let sortedResult = [];
@@ -46,7 +57,7 @@ const MatchTable = (props) => {
         for (let talentIndex = 0; talentIndex < talentTable.length; talentIndex ++) {
 
             matchResult[talentIndex] = {};
-            sortedResult[talentIndex] = {};
+            sortedResult[talentIndex] = [];
 
             for (let jobIndex = 0; jobIndex < jobTable.length; jobIndex ++ ) {
                 let jobTalentScore = 0;
@@ -58,27 +69,59 @@ const MatchTable = (props) => {
                         jobTalentScore ++;
                     }
                 }
-                console.log(`index: ${talentIndex}, talent: ${talentTable[talentIndex]}`);
+                // console.log(`index: ${talentIndex}, talent: ${talentTable[talentIndex]}`);
                 matchResult[talentIndex][`${jobIndex}`] = jobTalentScore;
             }
             
-            sortedResult[talentIndex] = Object.entries( matchResult[talentIndex]).sort((a,b) => a[1] - b[1]);
+            sortedResult[talentIndex] = Object.entries( matchResult[talentIndex]).sort((a,b) => b[1] - a[1]).slice(0,5);
 
-            console.log('matched scroe', matchResult[talentIndex]);
-            console.log('ranked index', sortedResult[talentIndex]);
+            // console.log('matched scroe', matchResult[talentIndex]);
+            // console.log('ranked index', sortedResult[talentIndex]);
         }
 
+        console.log('whole sorted result', sortedResult);
 
-
-        return  matchResult, sortedResult
+        return  sortedResult
     };
 
 
+    // Parameter: [[job index: score],[job index: score],[job index: score],[job index: score],[job index: score], ]
+    const findJobLink = (jobScoreArray) => {
+        let jobTalbe = props.jd.rows.slice(1);
+        let jobLinkPosition = props.jd.rows[0].indexOf(URL);
+        let joblinks = [];
+        for(let eachJob of jobScoreArray) {
+            
+            joblinks.push(jobTalbe[eachJob[0]][jobLinkPosition]);
 
-    matchingAlgo({talentMap , jdMap});
+        }
+        return joblinks;
+    }
 
-    return (
-        <OutTable data={props.jd.rows} columns={props.jd.cols}/>
+    // Give sortedResult of all talents, output display table
+    const buildTable = (sortedResult, table) => {
+        console.log(sortedResult.length);
+        // for (let index = 1; index < sortedResult.length ; index ++) {
+        //     table.rows[index+1].push(findJobLink(sortedResult[index]));
+        //     console.log('after add one row', table);
+        // }
+        
+        setIsBuilt(true);
+    }
+
+    const {talentMap , jdMap} = buildStandardTable();
+
+    let sortedResult = matchingAlgo({talentMap,jdMap});
+
+    console.log(sortedResult);
+
+    return ( 
+        <div className='table'>
+            {  isbuilt ?  <p> loading </p> :  <OutTable data={result.rows} columns={result.cols}/>}
+        </div>
+          
+        
+        
     )
 }
 
