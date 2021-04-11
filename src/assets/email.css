@@ -8,7 +8,7 @@
     position: absolute;
     top: 25%;
     left: 25%;
-    background-color: rgba(221, 221, 221, 0.5); /* complimenting your modal colors */
+    background-color: rgba(221, 221, 221); /* complimenting your modal colors */
     z-index: 100;
 }
 .email-container.show {

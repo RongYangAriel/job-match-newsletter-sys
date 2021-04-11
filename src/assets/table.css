@@ -1,0 +1,7 @@
+.matchedDataTable td{
+    border: 1px solid black;
+    word-break: break-all;
+    white-space: pre-wrap;
+    min-width: 50px;
+    max-width: 150px;
+}
