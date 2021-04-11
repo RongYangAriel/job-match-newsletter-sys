@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {OutTable, ExcelRenderer} from 'react-excel-renderer';
+import { CircularProgress } from '@material-ui/core';
 
 
 //constand can be changed based on excel col name
@@ -9,15 +10,23 @@ const URL = "JobURL";
 
 
 const MatchTable = (props) => {
-
-    const result = {
-            cols: [...props.talent.cols, {name: 'joblinks', key:'joblinks'}, {name: 'Preview(Popup)', key:'popup'}],
-            rows: [...props.talent.rows]
-        };
     
+    const [table, setTable] = useState({
+        cols: [...props.talent.cols, 
+            {name: "L", key: 11},
+            {name: "Link 1", key: 12},
+            {name: "Link 2", key: 13},
+            {name: "Link 3", key: 14},
+            {name: "Link 4", key: 15},
+            {name: "Link 5", key: 16},
+            {name: "Preview", key: 17}],
+        rows: [...props.talent.rows]
+    })
     const [isbuilt,setIsBuilt] = useState(false);
+    const [ready, setReady] = useState(false);
 
-   
+
+
 
 
     // Find the standarad col index in both excel
@@ -79,45 +88,88 @@ const MatchTable = (props) => {
             // console.log('ranked index', sortedResult[talentIndex]);
         }
 
-        console.log('whole sorted result', sortedResult);
+        // console.log('whole sorted result', sortedResult);
+
+        // setIsBuilt(true);
 
         return  sortedResult
     };
 
 
     // Parameter: [[job index: score],[job index: score],[job index: score],[job index: score],[job index: score], ]
-    const findJobLink = (jobScoreArray) => {
-        let jobTalbe = props.jd.rows.slice(1);
-        let jobLinkPosition = props.jd.rows[0].indexOf(URL);
+    // Find job link for each candidate
+    const findJobLink = (jobScoreArray, index) => {
+        let jobTalbe = [...props.jd.rows].slice(1);
+        let jobLinkPosition = [...props.jd.rows[0]].indexOf(URL);
         let joblinks = [];
         for(let eachJob of jobScoreArray) {
             
             joblinks.push(jobTalbe[eachJob[0]][jobLinkPosition]);
 
         }
+        // console.log(`findjoblink function: joblinks for ${index} candidate, ${joblinks}`);
         return joblinks;
     }
 
     // Give sortedResult of all talents, output display table
-    const buildTable = (sortedResult, table) => {
-        console.log(sortedResult.length);
-        // for (let index = 1; index < sortedResult.length ; index ++) {
-        //     table.rows[index+1].push(findJobLink(sortedResult[index]));
-        //     console.log('after add one row', table);
-        // }
-        
-        setIsBuilt(true);
+    const buildTable = (sortedResult) => {
+        let newTableRows = [...props.talent.rows];
+        if (isbuilt === false) {
+            // console.log(`props table rows before update ${newTableRows}`);
+            for (let index = 0; index < sortedResult.length ; index ++) {
+                let joblinks = findJobLink(sortedResult[index], index);
+                // console.log(`buildTable funcion: job links for cadidate ${index} is ${joblinks}`);
+                for (let eachJobLink of joblinks) {
+                    newTableRows[index + 1 ].push(eachJobLink);
+                }
+                
+            }
+            setIsBuilt(true);
+            return newTableRows;
+        } else {
+            return newTableRows;
+        }
     }
+ 
+    // Create standard map, get the posiiton of each criteria
+    // Get sorted results for each talent
+    // Append the data to original talent table
+    
 
-    const {talentMap , jdMap} = buildStandardTable();
 
-    let sortedResult = matchingAlgo({talentMap,jdMap});
+    
 
-    console.log(sortedResult);
+    useEffect(() => {
+
+        const {talentMap , jdMap} = buildStandardTable();
+        const  sortedResult = matchingAlgo({talentMap,jdMap});
+        let newTableRows = [];
+            newTableRows = buildTable(sortedResult);
+
+            setTable({
+                cols: [...table.cols],
+                rows: newTableRows           
+            });
+            setReady(true);
+
+    }, [isbuilt]);
+       
+    useEffect(() => {
+        console.log('table update', table);
+    },[table])
+
+    useEffect(() => {
+        console.log('isbuilt update', isbuilt);
+    },[isbuilt])
+
+    useEffect(() => {
+        console.log('ready update', ready);
+    },[ready])
 
     return ( 
+        
         <div className='table'>
-            {  isbuilt ?  <p> loading </p> :  <OutTable data={result.rows} columns={result.cols}/>}
+         {  ready ?  <OutTable data={table.rows} columns={table.cols}/> : <CircularProgress/> }
         </div>
           
         

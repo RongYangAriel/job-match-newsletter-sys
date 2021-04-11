@@ -48,6 +48,8 @@ class ExcelImporter extends Component  {
 
     this.talentHandler = this.talentHandler.bind(this);
     this.jdHandler = this.jdHandler.bind(this);
+    this.emailPop = this.emailPop.bind(this);
+    this.matchData = this.matchData.bind(this);
     }
 
     talentHandler = (event) => {
@@ -92,8 +94,10 @@ class ExcelImporter extends Component  {
     }
 
     matchData = () => {
-        if(this.state.talent.dataLoaded && this.state.jd.dataLoaded) {
-            this.setState({dataLoaded: true});
+        if (this.state.talent.dataLoaded && this.state.jd.dataLoaded) {
+            this.setState({dataLoaded: true}, () => {
+                console.log(this.state);
+            });
         }
     }
 
