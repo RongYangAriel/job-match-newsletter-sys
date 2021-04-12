@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/job-match-newsletter-sys/static/css/main.66d5adf9.chunk.css",
+    "main.js": "/job-match-newsletter-sys/static/js/main.16b690ff.chunk.js",
+    "main.js.map": "/job-match-newsletter-sys/static/js/main.16b690ff.chunk.js.map",
+    "runtime-main.js": "/job-match-newsletter-sys/static/js/runtime-main.bcab8546.js",
+    "runtime-main.js.map": "/job-match-newsletter-sys/static/js/runtime-main.bcab8546.js.map",
+    "static/js/2.3d4979d6.chunk.js": "/job-match-newsletter-sys/static/js/2.3d4979d6.chunk.js",
+    "static/js/2.3d4979d6.chunk.js.map": "/job-match-newsletter-sys/static/js/2.3d4979d6.chunk.js.map",
+    "static/js/3.0dc2c4a5.chunk.js": "/job-match-newsletter-sys/static/js/3.0dc2c4a5.chunk.js",
+    "static/js/3.0dc2c4a5.chunk.js.map": "/job-match-newsletter-sys/static/js/3.0dc2c4a5.chunk.js.map",
+    "index.html": "/job-match-newsletter-sys/index.html",
+    "static/css/main.66d5adf9.chunk.css.map": "/job-match-newsletter-sys/static/css/main.66d5adf9.chunk.css.map",
+    "static/js/2.3d4979d6.chunk.js.LICENSE.txt": "/job-match-newsletter-sys/static/js/2.3d4979d6.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/job-match-newsletter-sys/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.bcab8546.js",
+    "static/js/2.3d4979d6.chunk.js",
+    "static/css/main.66d5adf9.chunk.css",
+    "static/js/main.16b690ff.chunk.js"
+  ]
+}
