@@ -1,3 +1,31 @@
+[Live Demo](https://rongyangariel.github.io/job-match-newsletter-sys/)
+
+Page Elements
+
+●	JD import button \
+  Click to import Job description
+
+●	Talent import Button \
+  Click to import talents
+
+●	Email Template button \
+  Click to open/edit email template
+  The content of a newsletter includes subject, introduction, matched jobs and a close. ( check Sample template file )
+
+●	Load Data Button \
+  Click to show the matched results in datatable, 
+	Automated match each talent with 3-5 jobs (e.g.,   3 <= matched <= 5 ). 
+
+●	Data Table \
+	Display matched jobs for talents imported
+	May list 3-5 matched jobs  for each recipient based on their location, tech stack, seniority and IOM (IC Or Mgmt role).
+	Preview link/button for each row/recipient (TBD)
+
+●	Send Button\
+	pops one email preview (TBD)
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
