@@ -25,7 +25,7 @@ const MatchTable = (props) => {
     const [isbuilt,setIsBuilt] = useState(false);
     const [ready, setReady] = useState(false);
 
-
+    const [jobs, setJobs] = useState({});
 
 
 
@@ -88,13 +88,26 @@ const MatchTable = (props) => {
             // console.log('ranked index', sortedResult[talentIndex]);
         }
 
-        // console.log('whole sorted result', sortedResult);
+        console.log('whole sorted result', sortedResult);
 
         // setIsBuilt(true);
 
         return  sortedResult
     };
 
+
+    //Prepare email template job for each candidate, sorted data 
+    const findJobs = (sortedResult) => {
+        let jobTable = [...props.jd.rows].slice(1);
+        let emailText = {};
+        for (let index = 0; index < sortedResult.length; index ++) {
+            emailText[index] = []
+            for (let eachJob of sortedResult[index]) {
+                emailText[index].push(jobTable[eachJob[0]]);
+            }
+        }
+        return emailText;
+    }
 
     // Parameter: [[job index: score],[job index: score],[job index: score],[job index: score],[job index: score], ]
     // Find job link for each candidate
@@ -134,24 +147,21 @@ const MatchTable = (props) => {
     // Create standard map, get the posiiton of each criteria
     // Get sorted results for each talent
     // Append the data to original talent table
-    
-
-
-    
+        
 
     useEffect(() => {
 
         const {talentMap , jdMap} = buildStandardTable();
         const  sortedResult = matchingAlgo({talentMap,jdMap});
-        let newTableRows = [];
-            newTableRows = buildTable(sortedResult);
+        let newTableRows = buildTable(sortedResult);
+        let emailText = findJobs(sortedResult);
 
-            setTable({
-                cols: [...table.cols],
-                rows: newTableRows           
-            });
-            setReady(true);
-
+        setTable({
+            cols: [...table.cols],
+            rows: newTableRows           
+        });
+        setReady(true);
+        console.log(emailText);
     }, [isbuilt]);
        
     useEffect(() => {
@@ -166,10 +176,14 @@ const MatchTable = (props) => {
         console.log('ready update', ready);
     },[ready])
 
+    useEffect(()=> {
+        setIsBuilt(false);
+    }, [props]);
+
     return ( 
         
         <div className='table'>
-         {  ready ?  <OutTable data={table.rows} columns={table.cols}/> : <CircularProgress/> }
+         {  ready ?  <OutTable data={table.rows} columns={table.cols}  tableClassName="matchedDataTable"/> : <CircularProgress/> }
         </div>
           
         

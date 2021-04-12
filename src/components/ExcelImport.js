@@ -2,9 +2,11 @@ import React, { useState, Component} from "react";
 
 import {OutTable, ExcelRenderer} from 'react-excel-renderer';
 import {Button, Input} from '@material-ui/core';
-import Email from './Email';
+import EmailTemplate from './EmailTemplate';
 import MatchTable from './MatchTable';
 import '../assets/email.css';
+import '../assets/table.css';
+import Email from "./Email";
 
 class ExcelImporter extends Component  {
     constructor(props){
@@ -37,12 +39,14 @@ class ExcelImporter extends Component  {
         },
         emailTemplate: {
             subject: null,
-            body: "This is Kirby who has connected with you on LinkedIn several days ago. I would like to share the open opportunities that could be a good match for you.  Meanwhile, I’d love to send the job openings that could be a good fit along with our insights to you every week. Hope the information could help you more with your career choice.",
+            body: "Hi, \n This is Kirby who has connected with you on LinkedIn several days ago. I would like to share the open opportunities that could be a good match for you.  Meanwhile, I’d love to send the job openings that could be a good fit along with our insights to you every week. Hope the information could help you more with your career choice. \n ",
             matchedPosition: null,
-            close: "Thanks, Kirby"
+            close: "Thanks, Kirby",
+            from: null
         },
         emailPoped: false,
         dataLoaded: false,
+        previewPoped:false
 
     };
 
@@ -108,6 +112,14 @@ class ExcelImporter extends Component  {
             console.log(this.state);
         });
     }
+    
+    previewPop = (event) => {
+        this.setState({
+            emailPoped:! (this.state.previewPoped)
+        }, () => {
+            console.log(this.state);
+        });
+    }
 
     render () 
         {
@@ -135,18 +147,27 @@ class ExcelImporter extends Component  {
             
             
             <div className='links'>
-                <Button variant="contained" color="default" component="label" onClick={this.matchData}>
+                <Button variant="contained" color={this.state.talent.dataLoaded && this.state.jd.dataLoaded ? 'primary' : "default"} component="label" onClick={this.matchData}>
                     Load Data
+                </Button>
+                <Button variant="contained" color={this.state.dataLoaded ? 'primary' : "default"} component="label" onClick={this.previewPop}>
+                    Preview
                 </Button>
             </div>
 
             {
                 this.state.emailPoped ? 
                 (<div className ='email-container show'> 
-                    <Email toggle={this.emailPop} /> 
+                    <EmailTemplate toggle={this.emailPop} 
+                        body={this.state.emailTemplate.body} 
+                        subject={this.state.emailTemplate.subject}
+                        from = {this.state.emailTemplate.from}/> 
                 </div>)
                 : (<div className ='email-container hidden'> 
-                <Email toggle={this.emailPop} /> 
+                    <EmailTemplate toggle={this.emailPop} 
+                        body={this.state.emailTemplate.body} 
+                        subject={this.state.emailTemplate.subject}
+                        from = {this.state.emailTemplate.from}/> 
             </div>)
             }
             {
@@ -156,7 +177,13 @@ class ExcelImporter extends Component  {
                 </div>
                 ) : null
             }
-           
+            {
+                this.state.previewPoped ? (
+                    <div>
+                        <Email emailText ={this.props.email.body} />
+                    </div>
+                ) : null
+            }
         </div>
           
 
